@@ -43,7 +43,27 @@
 @implementation SPDisplayObjectContainer (Rendering)
 
 - (void)render:(SPRenderSupport *)support
-{    
+{
+    bool se = glIsEnabled(GL_SCISSOR_TEST);
+    
+    if (mClipWidth != 0.0f || mClipHeight != 0.0f) {
+        glEnable(GL_SCISSOR_TEST);
+        SPMatrix *tm = [self transformationMatrixToSpace:self.stage];
+        SPPoint *o = [SPPoint pointWithX:0 y:0];
+        SPPoint *to = [tm transformPoint:o];
+        
+        SPRectangle *clip = [[SPRectangle alloc] init];
+        
+        float sf = [SPStage contentScaleFactor];
+        clip.width = (self.clipWidth ? self.clipWidth : self.width) * sf;
+        clip.height = (self.clipHeight ? self.clipHeight : self.height) * sf;
+        
+        clip.x = to.x*sf;
+        clip.y = (self.stage.height*sf)-(to.y*sf)-(clip.height);
+
+        glScissor(clip.x, clip.y, clip.width, clip.height);
+    }
+
     float alpha = self.alpha;
     
     for (SPDisplayObject *child in mChildren)
@@ -56,11 +76,17 @@
             [SPRenderSupport transformMatrixForObject:child];
             
             child.alpha *= alpha;
+            
             [child render:support];
+            
             child.alpha = childAlpha;
             
             glPopMatrix();        
         }
+    }
+
+    if (!se && (mClipWidth != 0.0f || mClipHeight != 0.0f)) {
+        glDisable(GL_SCISSOR_TEST);
     }
 }
 

@@ -35,6 +35,9 @@ static void getChildEventListeners(SPDisplayObject *object, NSString *eventType,
 
 @implementation SPDisplayObjectContainer
 
+@synthesize clipWidth = mClipWidth;
+@synthesize clipHeight = mClipHeight;
+
 - (id)init
 {    
     #if DEBUG    

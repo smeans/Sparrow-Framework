@@ -61,7 +61,9 @@
 
 @interface SPDisplayObjectContainer : SPDisplayObject <NSFastEnumeration>
 {
-  @private
+  @protected
+    float mClipWidth;
+    float mClipHeight;
     NSMutableArray *mChildren;
 }
 

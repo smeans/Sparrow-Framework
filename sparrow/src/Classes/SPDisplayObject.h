@@ -77,7 +77,7 @@
 
 @interface SPDisplayObject : SPEventDispatcher 
 {
-  @private
+  @protected
     float mX;
     float mY;
     float mPivotX;
@@ -157,6 +157,12 @@
 
 /// The opacity of the object. 0 = transparent, 1 = opaque.
 @property (nonatomic, assign) float alpha;
+
+// The width to which the contents will be clipped.
+@property (nonatomic, assign) float clipWidth;
+
+// The height to which the contents will be clipped.
+@property (nonatomic, assign) float clipHeight;
 
 /// The visibility of the object. An invisible object will be untouchable.
 @property (nonatomic, assign) BOOL visible;
