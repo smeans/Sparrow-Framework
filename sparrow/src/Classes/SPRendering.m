@@ -46,22 +46,22 @@
 {
     bool se = glIsEnabled(GL_SCISSOR_TEST);
     
+    SPRectangle *clip = nil;
+    
     if (mClipWidth != 0.0f || mClipHeight != 0.0f) {
+        clip = [[SPRectangle alloc] init];
         glEnable(GL_SCISSOR_TEST);
         SPMatrix *tm = [self transformationMatrixToSpace:self.stage];
-        SPPoint *o = [SPPoint pointWithX:0 y:0];
-        SPPoint *to = [tm transformPoint:o];
-        
-        SPRectangle *clip = [[SPRectangle alloc] init];
-        
-        float sf = [SPStage contentScaleFactor];
-        clip.width = (self.clipWidth ? self.clipWidth : self.width) * sf;
-        clip.height = (self.clipHeight ? self.clipHeight : self.height) * sf;
-        
-        clip.x = to.x*sf;
-        clip.y = (self.stage.height*sf)-(to.y*sf)-(clip.height);
+        SPPoint *tl = [self localToGlobal:[SPPoint pointWithX:0 y:0]];
+        SPPoint *br = [self localToGlobal:[SPPoint pointWithX:(self.clipWidth ? self.clipWidth : self.width) y:(self.clipHeight ? self.clipHeight : self.height)]];
 
-        glScissor(clip.x, clip.y, clip.width, clip.height);
+        float sf = [SPStage contentScaleFactor];
+        
+        clip.width = (br.x-tl.x)*sf;
+        clip.height = (br.y-tl.y)*sf;
+
+        clip.x = tl.x*sf;
+        clip.y = (self.stage.height-br.y)*sf;
     }
 
     float alpha = self.alpha;
@@ -77,6 +77,9 @@
             
             child.alpha *= alpha;
             
+            if (clip) {
+                glScissor(clip.x, clip.y, clip.width, clip.height);
+            }
             [child render:support];
             
             child.alpha = childAlpha;
