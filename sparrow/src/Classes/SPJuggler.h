@@ -80,6 +80,13 @@
 /// delayed invocations).
 - (void)removeObjectsWithTarget:(id)object;
 
+/// Returns a list of all objects with a `target` property referencing a certain object (e.g. tweens or
+/// delayed invocations).
+- (NSArray *)getObjectsWithTarget:(id)object;
+
+/// Checks to see if a given object is currently a target of an active object.
+- (bool)isActiveTarget:(id)object;
+
 /// Delays the execution of a certain method. Returns a proxy object on which to call the method
 /// instead. Execution will be delayed until `time` has passed.
 - (id)delayInvocationAtTarget:(id)target byTime:(double)time;

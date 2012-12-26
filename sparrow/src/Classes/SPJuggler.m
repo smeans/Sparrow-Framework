@@ -80,6 +80,35 @@
     mObjects = remainingObjects;
 }
 
+- (NSArray *)getObjectsWithTarget:(id)object
+{
+    SEL targetSel = @selector(target);
+    NSMutableArray *matchingObjects = [[[NSMutableArray alloc] init] autorelease];
+    
+    for (id currentObject in mObjects)
+    {
+        if ([currentObject respondsToSelector:targetSel] && [[currentObject target] isEqual:object])
+            [matchingObjects addObject:currentObject];
+    }
+    
+    return matchingObjects;
+}
+
+- (bool)isActiveTarget:(id)object
+{
+    SEL targetSel = @selector(target);
+    
+    for (id currentObject in mObjects)
+    {
+        if ([currentObject respondsToSelector:targetSel] && [[currentObject target] isEqual:object]) {
+            return YES;
+        }
+    }
+    
+    return NO;
+}
+
+
 - (id)delayInvocationAtTarget:(id)target byTime:(double)time
 {
     SPDelayedInvocation *delayedInvoc = [SPDelayedInvocation invocationWithTarget:target delay:time];
