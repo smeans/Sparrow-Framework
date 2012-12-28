@@ -19,4 +19,21 @@
     return [[[SPSprite alloc] init] autorelease];
 }
 
+- (void)center
+{
+    self.x = self.parent.width/2-self.width/2;
+    self.y = self.parent.height/2-self.height/2;
+}
+
+- (void)setScale:(float)scale
+{
+    self.scaleX =
+    self.scaleY = scale;
+}
+
+- (float)scale
+{
+    return (self.scaleX + self.scaleY)/2.0f;
+}
+
 @end

@@ -51,7 +51,6 @@
     if (mClipWidth != 0.0f || mClipHeight != 0.0f) {
         clip = [[SPRectangle alloc] init];
         glEnable(GL_SCISSOR_TEST);
-        SPMatrix *tm = [self transformationMatrixToSpace:self.stage];
         SPPoint *tl = [self localToGlobal:[SPPoint pointWithX:0 y:0]];
         SPPoint *br = [self localToGlobal:[SPPoint pointWithX:(self.clipWidth ? self.clipWidth : self.width) y:(self.clipHeight ? self.clipHeight : self.height)]];
 

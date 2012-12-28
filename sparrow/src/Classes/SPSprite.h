@@ -45,4 +45,9 @@
 /// Create a new, empty sprite.
 + (SPSprite*)sprite;
 
+/// Center the sprite in its parent.
+- (void)center;
+
+@property (assign, nonatomic) float scale;
+
 @end
